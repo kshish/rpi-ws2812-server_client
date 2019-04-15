@@ -1,0 +1,32 @@
+import socket
+from time import sleep
+
+HOST = '192.168.1.18' # Enter IP or Hostname of your server
+PORT = 9999 # Pick an open Port (1000+ recommended), must match the server port
+
+print 'use exit command to quit'
+
+#Lets loop awaiting for your input
+while True:
+    
+    command = raw_input('Enter your command(s separated by colon ;): ')
+    print command
+    command = command + ";"
+    if command == 'exit;':
+        break
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST,PORT))
+    # command =  'setup 1,300,WS2811_STRIP_GRB;init;random 1,0,300,RGBWL;render'
+    server_thread = 'thread_start;' + command + 'thread_stop;'
+    print server_thread
+    s.send(server_thread)
+#	reply = s.recv(1024)
+#	print reply
+    print 'about to close'
+    
+    print 'sleeping...'
+    sleep(1)
+    s.close()
+    
+print "exiting"
